@@ -1,14 +1,17 @@
-import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import { Text, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
+import { useState } from "react";
 import useFetch from "api/useFetch";
 import { CompoundCTokenResponse } from "types/api-calls";
 import { compoundCTokenValidator } from "api/validators";
 import SupplyInterestViewer from "components/SupplyInterestViewer";
+import Input from "components/Input";
 import { compound } from "api/api.json";
 import { DAI, USDC, USDT } from "config/token-address.json";
 
 const url = compound.baseUrl + compound.endpoints.CTokenService;
 
-const LendingPreview = () => {
+const CompoundLending = () => {
+  const [totalAmount, setTotalAmount] = useState("");
   const { response, loading, error } = useFetch<CompoundCTokenResponse>(
     url,
     {
@@ -29,36 +32,43 @@ const LendingPreview = () => {
     if (loading) return <ActivityIndicator size="large" color="purple" />;
     if (error)
       return (
-        <Text style={styles.textH2}>
+        <Text style={styles.textH1}>
           &#128680; Looks like something went wrong! Please try refreshing the page! &#128680;
         </Text>
       );
 
-    return <Text style={styles.textH1}>Plan ahead your assets allocation and earnings!</Text>;
+    return (
+      response && (
+        <>
+          <Text style={styles.textH1}>Plan ahead your assets allocation and earnings!</Text>
+          <SupplyInterestViewer cTokens={response?.cToken} />
+          <Input
+            totalAmount={totalAmount}
+            setTotalAmount={setTotalAmount}
+            text="Enter amount value you wish to invest ($):"
+          />
+        </>
+      )
+    );
   };
 
-  return <View style={styles.container}>{render()}</View>;
+  return <ScrollView contentContainerStyle={styles.container}>{render()}</ScrollView>;
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
   },
   textH1: {
-    flex: 1,
-    fontSize: 24,
-    fontWeight: "700",
     textAlign: "center",
-  },
-  textH2: {
+    minHeight: 120,
+    paddingTop: 50,
+    width: "100%",
     fontSize: 20,
     fontWeight: "700",
-    textAlign: "center",
   },
 });
 
-export default LendingPreview;
+export default CompoundLending;
