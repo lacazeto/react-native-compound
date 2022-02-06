@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import LendingPreview from "pages/LendingPage";
+import LendingPreview from "pages/LendingPreview";
 
 const App = () => {
   return (

@@ -1,6 +1,6 @@
 {
   "compound": {
-    "api": "https://api.compound.finance/api/v2",
+    "baseUrl": "https://api.compound.finance/api/v2",
     "endpoints": { "CTokenService": "/ctoken" }
   }
 }

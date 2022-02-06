@@ -1,5 +1,10 @@
 export interface CompoundCTokenResponse {
-  cToken: Record<any, any>;
+  cToken: {
+    supply_rate: {
+      value: string;
+    };
+    underlying_symbol: string;
+  }[];
   error: string;
   meta: {
     unique_suppliers?: number;
@@ -14,8 +19,13 @@ export interface CompoundCTokenResponse {
   };
 }
 
-export type CustomFetchResponse<T> = {
+export type ApiResponseValidatorCb<T> = (response: T) => {
+  isValid: boolean;
+  error: Error | null;
+};
+
+export interface CustomFetchResponse<T> {
   response: T | null;
   error: string;
   loading: boolean;
-};
+}
