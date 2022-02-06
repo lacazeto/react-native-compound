@@ -1,10 +1,12 @@
 import { StyleSheet, View } from "react-native";
-import LendingPreview from "pages/LendingPreview";
+import Header from "components/Header";
+import CompoundLending from "pages/CompoundLending";
 
 const App = () => {
   return (
     <View style={styles.container}>
-      <LendingPreview />
+      <Header />
+      <CompoundLending />
     </View>
   );
 };
@@ -13,8 +15,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
 
