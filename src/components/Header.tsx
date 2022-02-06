@@ -11,14 +11,15 @@ const Header = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "60px",
+    height: 60,
     backgroundColor: "purple",
     alignItems: "center",
     justifyContent: "center",
-    paddingLeft: "20px",
+    paddingLeft: 20,
   },
   title: {
     fontSize: 20,
+    paddingTop: 20,
     fontWeight: "700",
     color: "white",
     alignSelf: "flex-start",
