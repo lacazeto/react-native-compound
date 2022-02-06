@@ -1,10 +1,10 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, SafeAreaView, StyleSheet } from "react-native";
 
 const Header = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>reDefi Investments</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   title: {
+    paddingLeft: 20,
     fontSize: 20,
-    paddingTop: 20,
     fontWeight: "700",
     color: "white",
     alignSelf: "flex-start",
