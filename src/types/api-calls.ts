@@ -1,10 +1,12 @@
+export interface CToken {
+  supply_rate: {
+    value: string;
+  };
+  underlying_symbol: string;
+}
+
 export interface CompoundCTokenResponse {
-  cToken: {
-    supply_rate: {
-      value: string;
-    };
-    underlying_symbol: string;
-  }[];
+  cToken: CToken[];
   error: string;
   meta: {
     unique_suppliers?: number;
