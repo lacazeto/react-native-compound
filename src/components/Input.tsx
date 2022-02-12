@@ -11,7 +11,7 @@ const Input = ({ text, totalAmount, setTotalAmount }: Props) => {
   const [value, setValue] = useState("");
 
   const updateTotalAmount = () => {
-    if (/^\d+$/.test(value)) setTotalAmount(value);
+    if (/^\d+\.?\d*$/.test(value)) setTotalAmount(value);
   };
 
   return (
@@ -20,7 +20,8 @@ const Input = ({ text, totalAmount, setTotalAmount }: Props) => {
         <Text style={styles.text}>{text}</Text>
         <TextInput
           style={styles.input}
-          value={value}
+          defaultValue={"0.00"}
+          clearTextOnFocus={true}
           onChangeText={(val) => setValue(val)}
           keyboardType={"numeric"}
           onSubmitEditing={() => updateTotalAmount()}
