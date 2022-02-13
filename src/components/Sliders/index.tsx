@@ -2,7 +2,7 @@ import { Dispatch, useReducer } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import CommunitySlider from "@react-native-community/slider";
 import { reducer, getInitialState } from "./reducer";
-import { SlidersState, ReducerAction, ReducerActionType } from "./types";
+import { SlidersState, ReducerAction } from "./types";
 import { DisplayableTokens, Token } from "types/tokens";
 
 interface SliderProp {
@@ -21,14 +21,6 @@ const Slider = (props: SliderProp) => {
   const value = state["allocations"][variation];
   const humanReadableValue = value / 100;
 
-  const onChange = (newValue: number) => {
-    if (newValue > value) {
-      setState({ type: ReducerActionType.increment, token: variation, value: newValue });
-    } else {
-      setState({ type: ReducerActionType.decrement, token: variation, value: newValue });
-    }
-  };
-
   return (
     <View>
       <Text style={styles.text}>{`${variation}: $${humanReadableValue}`}</Text>
@@ -41,7 +33,7 @@ const Slider = (props: SliderProp) => {
         step={100}
         style={styles.slider}
         {...props}
-        onValueChange={onChange}
+        onValueChange={(newValue: number) => setState({ token: variation, value: newValue })}
       />
     </View>
   );

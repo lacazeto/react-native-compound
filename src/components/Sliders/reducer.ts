@@ -1,29 +1,21 @@
-import { SlidersState, ReducerAction, ReducerActionType } from "./types";
-import { DisplayableTokens } from "types/tokens";
+import { SlidersState, ReducerAction } from "./types";
+import { DisplayableTokens, Token } from "types/tokens";
 
 export const reducer = (state: SlidersState, action: ReducerAction) => {
-  const keys = Object.keys(state.allocations);
+  const keys = Object.keys(state.allocations) as Token[];
   const divider = keys.length - 1;
+  const valueChange = (state.allocations[action.token] - action.value) / divider;
+  const nulledSliders = keys.filter((key) => state.allocations[key as Token] === 0).length;
+  const nullSliderMultiplier = valueChange > 0 ? 1 : nulledSliders + 1;
   const newState = Object.assign({}, state);
 
-  switch (action.type) {
-    case ReducerActionType.increment:
-      keys.forEach((key) => {
-        if (key === action.token) newState["allocations"][action.token] = action.value;
-        else newState["allocations"][action.token] -= action.value / divider;
-      });
-      console.log(divider, action.value, newState);
-      return newState;
-    case ReducerActionType.decrement:
-      keys.forEach((key) => {
-        if (key === action.token) newState["allocations"][action.token] = action.value;
-        else newState["allocations"][action.token] += action.value / divider;
-      });
-      console.log(divider, action.value, newState);
-      return newState;
-    default:
-      throw new Error();
-  }
+  keys.forEach((key) => {
+    if (key === action.token) newState["allocations"][action.token] = action.value;
+    else if (newState["allocations"][key as Token] === 0 && valueChange < 0) undefined;
+    else newState["allocations"][key as Token] += valueChange * nullSliderMultiplier;
+  });
+
+  return newState;
 };
 
 export const getInitialState = (variations: DisplayableTokens, totalAmount: number) => {
