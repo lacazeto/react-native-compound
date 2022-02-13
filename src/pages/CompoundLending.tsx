@@ -5,10 +5,13 @@ import { CompoundCTokenResponse } from "types/api-calls";
 import { compoundCTokenValidator } from "api/validators";
 import SupplyInterestViewer from "components/SupplyInterestViewer";
 import Input from "components/Input";
+import Sliders from "components/Sliders";
 import { compound } from "api/api.json";
-import { DAI, USDC, USDT } from "config/token-address.json";
+import tokenAdresses from "config/token-address.json";
+import { DisplayableTokens } from "types/tokens";
 
 const url = compound.baseUrl + compound.endpoints.CTokenService;
+const displayableTokens: DisplayableTokens = ["DAI", "USDC", "USDT"];
 
 const CompoundLending = () => {
   const [totalAmount, setTotalAmount] = useState("");
@@ -21,7 +24,7 @@ const CompoundLending = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        addresses: [USDC, USDT, DAI],
+        addresses: displayableTokens.map((token) => tokenAdresses[token]),
         block_timestamp: 0,
       }),
     },
@@ -47,6 +50,7 @@ const CompoundLending = () => {
             setTotalAmount={setTotalAmount}
             text="Enter amount value you wish to invest ($):"
           />
+          {/* {totalAmount && <Sliders variations={displayableTokens} totalAmount={parseInt(totalAmount)} />} */}
         </>
       )
     );
