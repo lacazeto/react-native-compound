@@ -4,4 +4,8 @@ export type SlidersState = {
   allocations: { [key in Token]: number };
   total: number;
 };
-export type ReducerAction = { type: "increment" | "decrement"; token: Token };
+export enum ReducerActionType {
+  increment = "increment",
+  decrement = "decrement",
+}
+export type ReducerAction = { type: ReducerActionType; token: Token; value: number };

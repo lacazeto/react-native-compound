@@ -2,7 +2,7 @@ import { Dispatch, useReducer } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import CommunitySlider from "@react-native-community/slider";
 import { reducer, getInitialState } from "./reducer";
-import { SlidersState, ReducerAction } from "./types";
+import { SlidersState, ReducerAction, ReducerActionType } from "./types";
 import { DisplayableTokens, Token } from "types/tokens";
 
 interface SliderProp {
@@ -21,9 +21,17 @@ const Slider = (props: SliderProp) => {
   const value = state["allocations"][variation];
   const humanReadableValue = value / 100;
 
+  const onChange = (newValue: number) => {
+    if (newValue > value) {
+      setState({ type: ReducerActionType.increment, token: variation, value: newValue });
+    } else {
+      setState({ type: ReducerActionType.decrement, token: variation, value: newValue });
+    }
+  };
+
   return (
     <View>
-      <Text style={styles.text}>{`Allocation to ${variation}: ${humanReadableValue}`}</Text>
+      <Text style={styles.text}>{`${variation}: $${humanReadableValue}`}</Text>
       <CommunitySlider
         minimumValue={0}
         maximumValue={totalAmount}
@@ -33,7 +41,7 @@ const Slider = (props: SliderProp) => {
         step={100}
         style={styles.slider}
         {...props}
-        // onValueChange={(value) => setState(value)}
+        onValueChange={onChange}
       />
     </View>
   );
@@ -41,13 +49,13 @@ const Slider = (props: SliderProp) => {
 
 const Sliders = (props: SlidersProps) => {
   const { totalAmount, variations } = props;
-  const [state, setState] = useReducer(reducer, getInitialState(variations, totalAmount));
+  const [state, dispatch] = useReducer(reducer, getInitialState(variations, totalAmount));
 
   return (
     <View>
       <Text style={styles.text}>Choose the allocation for each available token:</Text>
       {variations.map((variation) => (
-        <Slider key={variation} totalAmount={totalAmount} variation={variation} state={state} setState={setState} />
+        <Slider key={variation} totalAmount={totalAmount} variation={variation} state={state} setState={dispatch} />
       ))}
     </View>
   );

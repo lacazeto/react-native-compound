@@ -1,13 +1,26 @@
-import { SlidersState, ReducerAction } from "./types";
+import { SlidersState, ReducerAction, ReducerActionType } from "./types";
 import { DisplayableTokens } from "types/tokens";
 
 export const reducer = (state: SlidersState, action: ReducerAction) => {
-  switch (action.type) {
-    case "increment":
-      if (state["allocations"][action.token] === state.total) return { ...state };
-      const newState = {};
+  const keys = Object.keys(state.allocations);
+  const divider = keys.length - 1;
+  const newState = Object.assign({}, state);
 
-      return { ...state };
+  switch (action.type) {
+    case ReducerActionType.increment:
+      keys.forEach((key) => {
+        if (key === action.token) newState["allocations"][action.token] = action.value;
+        else newState["allocations"][action.token] -= action.value / divider;
+      });
+      console.log(divider, action.value, newState);
+      return newState;
+    case ReducerActionType.decrement:
+      keys.forEach((key) => {
+        if (key === action.token) newState["allocations"][action.token] = action.value;
+        else newState["allocations"][action.token] += action.value / divider;
+      });
+      console.log(divider, action.value, newState);
+      return newState;
     default:
       throw new Error();
   }
