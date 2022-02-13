@@ -1,13 +1,15 @@
-import { useState, useReducer } from "react";
+import { Dispatch, useReducer } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import CommunitySlider from "@react-native-community/slider";
-import reducer from "./reducer";
+import { reducer, getInitialState } from "./reducer";
+import { SlidersState, ReducerAction } from "./types";
 import { DisplayableTokens, Token } from "types/tokens";
 
 interface SliderProp {
   totalAmount: number;
-  variation: string;
-  index: number;
+  variation: Token;
+  state: SlidersState;
+  setState: Dispatch<ReducerAction>;
 }
 interface SlidersProps {
   totalAmount: number;
@@ -15,22 +17,23 @@ interface SlidersProps {
 }
 
 const Slider = (props: SliderProp) => {
-  const { totalAmount, index, variation } = props;
-  const [value, setValue] = useState(index === 0 ? totalAmount : 0);
+  const { totalAmount, variation, state, setState } = props;
+  const value = state["allocations"][variation];
+  const humanReadableValue = value / 100;
 
   return (
     <View>
-      <Text style={styles.text}>{`Allocation to ${variation}: ${value.toFixed(2)}`}</Text>
+      <Text style={styles.text}>{`Allocation to ${variation}: ${humanReadableValue}`}</Text>
       <CommunitySlider
         minimumValue={0}
         maximumValue={totalAmount}
         minimumTrackTintColor="#800080"
         maximumTrackTintColor="#ede8ed"
         value={value}
-        step={1}
+        step={100}
         style={styles.slider}
         {...props}
-        onValueChange={(value) => setValue(value)}
+        // onValueChange={(value) => setState(value)}
       />
     </View>
   );
@@ -38,18 +41,13 @@ const Slider = (props: SliderProp) => {
 
 const Sliders = (props: SlidersProps) => {
   const { totalAmount, variations } = props;
-  const initialState: { [key in Token]: number } = Object.fromEntries(
-    variations.map((variation, index) => [variation, index === 0 ? totalAmount : 0])
-  );
-
-  const [value, setValue] = useReducer(reducer, initialState);
+  const [state, setState] = useReducer(reducer, getInitialState(variations, totalAmount));
 
   return (
     <View>
       <Text style={styles.text}>Choose the allocation for each available token:</Text>
-
-      {variations.map((variation, index) => (
-        <Slider key={variation} totalAmount={totalAmount} variation={variation} index={index} />
+      {variations.map((variation) => (
+        <Slider key={variation} totalAmount={totalAmount} variation={variation} state={state} setState={setState} />
       ))}
     </View>
   );

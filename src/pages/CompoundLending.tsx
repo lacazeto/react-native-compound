@@ -50,7 +50,7 @@ const CompoundLending = () => {
             setTotalAmount={setTotalAmount}
             text="Enter amount value you wish to invest ($):"
           />
-          {/* {totalAmount && <Sliders variations={displayableTokens} totalAmount={parseInt(totalAmount)} />} */}
+          {totalAmount && <Sliders variations={displayableTokens} totalAmount={parseInt(totalAmount) * 100} />}
         </>
       )
     );
