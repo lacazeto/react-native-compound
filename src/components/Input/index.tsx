@@ -11,7 +11,7 @@ const Input = ({ text, totalAmount, setTotalAmount }: Props) => {
   const [value, setValue] = useState("");
 
   const updateTotalAmount = () => {
-    if (/^\d+\.?\d*$/.test(value)) setTotalAmount(value);
+    if (/^\d+\.?\d{2}$/.test(value)) setTotalAmount(value);
   };
 
   return (
